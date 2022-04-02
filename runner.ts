@@ -27,7 +27,10 @@ export async function run(source : string, config: any) : Promise<number> {
   var returnType = "";
   var returnExpr = "";
   const lastExpr = parsed[parsed.length - 1]
-  if(lastExpr.tag === "expr") {
+  if(lastExpr.tag === "expr" && lastExpr.expr.tag !== "builtin1") {
+    returnType = "(result i32)";
+    returnExpr = "(local.get $$last)"
+  } else if(lastExpr.tag === "expr" && lastExpr.expr.tag === "builtin1" && lastExpr.expr.name === "abs") {
     returnType = "(result i32)";
     returnExpr = "(local.get $$last)"
   }
@@ -35,6 +38,10 @@ export async function run(source : string, config: any) : Promise<number> {
   const importObject = config.importObject;
   const wasmSource = `(module
     (func $print (import "imports" "print") (param i32) (result i32))
+    (func $abs (import "imports" "abs")(param i32) (result i32))
+    (func $max (import "imports" "max")(param i32 i32) (result i32))
+    (func $min (import "imports" "min")(param i32 i32) (result i32))
+    (func $pow (import "imports" "pow")(param i32 i32) (result i32))
     (func (export "exported_func") ${returnType}
       ${compiled.wasmSource}
       ${returnExpr}

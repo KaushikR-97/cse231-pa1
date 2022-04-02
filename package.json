@@ -4,9 +4,9 @@
   "description": "A toy JIT using web assembly as the compilation target",
   "main": "index.js",
   "scripts": {
-    "build-web": "webpack && cp index.html build/",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts'"
-  },
+    "build-web": "webpack && copy \"index.html\" \"build/",
+    "test": "set env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.test.ts'"
+    },
   "author": "",
   "license": "ISC",
   "dependencies": {
