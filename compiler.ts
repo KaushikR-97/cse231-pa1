@@ -15,6 +15,11 @@ export function compile(source: string) : CompileResult {
   ast.forEach(s => {
     switch(s.tag) {
       case "define":
+        if (s.value.tag === "id"){
+          if (!(definedVars.has(s.value.name)))
+           throw new Error("ReferenceError")
+           break;
+        }
         definedVars.add(s.name);
         break;
     }
@@ -24,18 +29,21 @@ export function compile(source: string) : CompileResult {
   definedVars.forEach(v => {
     localDefines.push(`(local $${v} i32)`);
   })
-  
+  console.log(localDefines)
   const commandGroups = ast.map((stmt) => codeGen(stmt));
   const commands = localDefines.concat([].concat.apply([], commandGroups));
+  console.log("Generated: ", commands.join("\n"));
+  const localVars = new Set();
   commands.forEach(function (value) {
     var check = value.includes("local.get")
     if (check===true){
         var gt = value.substring(12,value.length-1)
-        if (!(definedVars.has(gt)))
+        if (!(localVars.has(gt)))
            throw new Error("ReferenceError")
+        else
+           localVars.add(gt)
     }
   }); 
- // console.log("Generated: ", commands.join("\n"));
   return {
     wasmSource: commands.join("\n"),
   };

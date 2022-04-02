@@ -8,3 +8,7 @@ This can be done the same way as the above one.Determine the type of the value a
 
 iii) max and min operators can take in muliple parameters other than 2.
 This can be done by allowing more than 2 operands for such kind of operations
+
+2) TA Videos were very helpful in understanding and submitting the code
+
+3) Did not collaborate with anyone.
