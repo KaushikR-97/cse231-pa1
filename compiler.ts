@@ -22,6 +22,13 @@ export function compile(source: string) : CompileResult {
         }
         definedVars.add(s.name);
         break;
+      case "expr":
+        if (s.expr.tag === "id"){
+          if (!(definedVars.has(s.expr.name)))
+             throw new Error("ReferenceError")
+             break;
+          }
+          break;  
     }
   }); 
   const scratchVar : string = `(local $$last i32)`;
@@ -29,19 +36,23 @@ export function compile(source: string) : CompileResult {
   definedVars.forEach(v => {
     localDefines.push(`(local $${v} i32)`);
   })
+  console.log(ast)
   console.log(localDefines)
   const commandGroups = ast.map((stmt) => codeGen(stmt));
   const commands = localDefines.concat([].concat.apply([], commandGroups));
   console.log("Generated: ", commands.join("\n"));
   const localVars = new Set();
   commands.forEach(function (value) {
+    var check1 = value.includes("local $")
+    if (check1===true){
+      var gt1 = value.substring(8,value.length-5)
+      localVars.add(gt1)
+    }
     var check = value.includes("local.get")
     if (check===true){
         var gt = value.substring(12,value.length-1)
         if (!(localVars.has(gt)))
-           throw new Error("ReferenceError")
-        else
-           localVars.add(gt)
+           throw new Error("ReferenceError1")
     }
   }); 
   return {
