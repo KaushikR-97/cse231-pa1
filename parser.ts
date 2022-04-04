@@ -118,7 +118,8 @@ export function traverseStmt(c : TreeCursor, s : string) : Stmt {
       c.parent(); // pop going into stmt
       return { tag: "expr", expr: expr }
     default:
-      throw new Error("ParseError Could not parse stmt at " + c.node.from + " " + c.node.to + ": " + s.substring(c.from, c.to));
+      if (!(c.node.from === 0 && c.node.to ===0))
+         throw new Error("ParseError Could not parse stmt at " + c.node.from + " " + c.node.to + ": " + s.substring(c.from, c.to));
   }
 }
 

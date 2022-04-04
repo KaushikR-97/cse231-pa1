@@ -27,6 +27,8 @@ export async function run(source : string, config: any) : Promise<number> {
   var returnType = "";
   var returnExpr = "";
   const lastExpr = parsed[parsed.length - 1]
+  if(lastExpr === null || lastExpr === undefined)
+    return;
   if(lastExpr.tag === "expr" && lastExpr.expr.tag !== "builtin1") {
     returnType = "(result i32)";
     returnExpr = "(local.get $$last)"

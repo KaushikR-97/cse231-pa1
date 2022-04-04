@@ -16,19 +16,18 @@ export function compile(source: string) : CompileResult {
     switch(s.tag) {
       case "define":
         if (s.value.tag === "id"){
-          if (!(definedVars.has(s.value.name)))
+          console.log(s.value.name)
+          if (!(definedVars.has(s.value.name))){
            throw new Error("ReferenceError")
            break;
+          }
+          else{
+            definedVars.add(s.name);
+            break;
+          }
         }
         definedVars.add(s.name);
         break;
-      case "expr":
-        if (s.expr.tag === "id"){
-          if (!(definedVars.has(s.expr.name)))
-             throw new Error("ReferenceError")
-             break;
-          }
-          break;  
     }
   }); 
   const scratchVar : string = `(local $$last i32)`;
@@ -52,7 +51,7 @@ export function compile(source: string) : CompileResult {
     if (check===true){
         var gt = value.substring(12,value.length-1)
         if (!(localVars.has(gt)))
-           throw new Error("ReferenceError1")
+           throw new Error("ReferenceError")
     }
   }); 
   return {
